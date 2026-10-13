@@ -18,6 +18,12 @@ podman load -i result
 podman run --privileged --name nixos-in-podman nixos-in-podman:local
 ```
 
+> **Tip:** No Nix on your host? Run the author's published image directly:
+>
+> ```console
+> podman run --privileged --name nixos-in-podman ghcr.io/yueyinqiu/nixos-in-podman:latest
+> ```
+
 ## Rebuild inside the container
 
 Get a shell inside the container:
@@ -35,15 +41,6 @@ nixos-rebuild switch --flake .#nixos-in-podman
 ```
 
 This requires network access to fetch nixpkgs and the binary cache.
-
-## Published image
-
-The author publishes builds to `ghcr.io/yueyinqiu/nixos-in-podman` (tags:
-`latest` and the commit sha). To run one without building:
-
-```console
-podman run --privileged --name nixos-in-podman ghcr.io/yueyinqiu/nixos-in-podman:latest
-```
 
 ## Restarting
 
