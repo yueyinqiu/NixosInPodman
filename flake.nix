@@ -7,7 +7,7 @@
     { nixpkgs, ... }:
     let
       name = "nixos-in-podman";
-      tag = nixpkgs.shortRev;
+      tag = "local";
       system = "x86_64-linux";
       os = nixpkgs.lib.nixosSystem {
         system = system;
