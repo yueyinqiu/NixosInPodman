@@ -1,24 +1,16 @@
 # nixos-in-podman
 
-A full NixOS system in a Podman container, rebuildable in place with
-`nixos-rebuild switch`.
+A template for a full NixOS system in a Podman container, rebuildable in place
+with `nixos-rebuild switch`.
 
-## Use the published image
+## Use as a template
 
-No Nix needed — just Podman:
-
-```console
-podman run --privileged --name nixos-in-podman ghcr.io/yueyinqiu/nixos-in-podman:latest
-```
-
-Tags:
-
-- `latest` — the newest build from `main`.
-- `<commit sha>` — a specific commit.
-
-## Build from source
-
-Requires Nix with flakes enabled.
+1. Click **Use this template** on GitHub to create your own repository.
+2. Edit `configuration.nix` to your liking. The base is minimal, so add anything
+   you need in the container (e.g. `git`, `openssh`).
+3. If you publish an image, update the repository path in
+   `.github/workflows/publish.yml`; if not, delete that workflow.
+4. Build and run (requires Nix with flakes enabled and Podman):
 
 ```console
 nix build .#nixos-in-podman-image
@@ -26,12 +18,25 @@ podman load -i result
 podman run --privileged --name nixos-in-podman nixos-in-podman:local
 ```
 
+> **Tip:** No Nix on your host? Run the author's published image directly:
+>
+> ```console
+> podman run --privileged --name nixos-in-podman ghcr.io/yueyinqiu/nixos-in-podman:latest
+> ```
+
 ## Rebuild inside the container
 
-Copy the flake sources (`flake.nix`, `flake.lock`, `configuration.nix`) into the
-container, then run:
+Get a shell inside the container:
 
 ```console
+podman exec -it nixos-in-podman /run/current-system/sw/bin/bash -l
+```
+
+Then clone your repository and switch to it:
+
+```console
+nix --extra-experimental-features 'nix-command flakes' run nixpkgs#git -- clone <your-repository-url>
+cd <repository>
 nixos-rebuild switch --flake .#nixos-in-podman
 ```
 
