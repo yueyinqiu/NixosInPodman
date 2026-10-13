@@ -35,10 +35,11 @@ jobs:
 
           nix build .#nixos-in-podman-image --out-link result
 
-          nix profile install nixpkgs#skopeo
+          nix profile add nixpkgs#skopeo
 
-          VERSION="${GITHUB_SHA::7}"
+          VERSION="${GITHUB_SHA}"
+          REPO="yueyinqiu/nixos-in-podman"
 
           echo "$GITHUB_TOKEN" | skopeo login --username "$GITHUB_ACTOR" --password-stdin ghcr.io
-          skopeo copy docker-archive:./result "docker://ghcr.io/$GITHUB_REPOSITORY:latest"
-          skopeo copy docker-archive:./result "docker://ghcr.io/$GITHUB_REPOSITORY:$VERSION"
+          skopeo copy docker-archive:./result "docker://ghcr.io/$REPO:latest"
+          skopeo copy docker-archive:./result "docker://ghcr.io/$REPO:$VERSION"

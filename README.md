@@ -3,22 +3,25 @@
 A full NixOS system in a Podman container, rebuildable in place with
 `nixos-rebuild switch`.
 
-## Prerequisites
+## Use the published image
 
-- Nix with flakes enabled
-- Podman
+No Nix needed — just Podman:
 
-## Build the image
+```console
+podman run --privileged --name nixos-in-podman ghcr.io/yueyinqiu/nixos-in-podman:latest
+```
+
+Tags:
+
+- `latest` — the newest build from `main`.
+- `<commit sha>` — a specific commit.
+
+## Build from source
+
+Requires Nix with flakes enabled.
 
 ```console
 nix build .#nixos-in-podman-image
-```
-
-This produces `./result`, a tarball loadable by Podman.
-
-## Load and run
-
-```console
 podman load -i result
 podman run --privileged --name nixos-in-podman nixos-in-podman:local
 ```
@@ -26,7 +29,7 @@ podman run --privileged --name nixos-in-podman nixos-in-podman:local
 ## Rebuild inside the container
 
 Copy the flake sources (`flake.nix`, `flake.lock`, `configuration.nix`) into the
-container (or bind-mount them), then run:
+container, then run:
 
 ```console
 nixos-rebuild switch --flake .#nixos-in-podman
