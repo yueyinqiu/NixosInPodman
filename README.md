@@ -29,7 +29,7 @@ podman exec -it nixos-in-podman /run/current-system/sw/bin/bash -l
 Then clone your repository and switch to it:
 
 ```console
-nix run nixpkgs#git -- clone <your-repository-url>
+nix --extra-experimental-features 'nix-command flakes' run nixpkgs#git -- clone <your-repository-url>
 cd <repository>
 nixos-rebuild switch --flake .#nixos-in-podman
 ```
