@@ -20,8 +20,11 @@ This produces `./result`, a tarball loadable by Podman.
 
 ```console
 podman load -i result
-podman run --privileged --name nixos-in-podman nixos-in-podman:0.0.1
+podman run --privileged --name nixos-in-podman nixos-in-podman:<shortRev>
 ```
+
+The image is tagged with the nixpkgs short revision it was built against (e.g.
+`7fd4004`); check the exact tag with `podman images` after `podman load`.
 
 ## Rebuild inside the container
 
