@@ -33,15 +33,12 @@ jobs:
         run: |
           set -euo pipefail
 
-          VERSION="${GITHUB_REF_NAME#v}"
-
           nix build .#nixos-in-podman-image --out-link result
 
-          docker load < result
-          echo "$GITHUB_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+          nix profile install nixpkgs#skopeo
 
-          docker tag "nixos-in-podman:local" "ghcr.io/$GITHUB_REPOSITORY:latest"
-          docker tag "nixos-in-podman:local" "ghcr.io/$GITHUB_REPOSITORY:$VERSION"
+          VERSION="${GITHUB_REF_NAME#v}"
 
-          docker push "ghcr.io/$GITHUB_REPOSITORY:latest"
-          docker push "ghcr.io/$GITHUB_REPOSITORY:$VERSION"
+          echo "$GITHUB_TOKEN" | skopeo login --username "$GITHUB_ACTOR" --password-stdin ghcr.io
+          skopeo copy docker-archive:./result "docker://ghcr.io/$GITHUB_REPOSITORY:latest"
+          skopeo copy docker-archive:./result "docker://ghcr.io/$GITHUB_REPOSITORY:$VERSION"
