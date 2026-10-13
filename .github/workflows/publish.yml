@@ -37,7 +37,7 @@ jobs:
 
           nix profile add nixpkgs#skopeo
 
-          VERSION="${GITHUB_SHA::7}"
+          VERSION="${GITHUB_SHA}"
           REPO="yueyinqiu/nixos-in-podman"
 
           echo "$GITHUB_TOKEN" | skopeo login --username "$GITHUB_ACTOR" --password-stdin ghcr.io
