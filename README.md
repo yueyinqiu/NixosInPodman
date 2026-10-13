@@ -29,7 +29,7 @@ podman run --privileged --name nixos-in-podman nixos-in-podman:local
 ## Rebuild inside the container
 
 Copy the flake sources (`flake.nix`, `flake.lock`, `configuration.nix`) into the
-container (or bind-mount them), then run:
+container, then run:
 
 ```console
 nixos-rebuild switch --flake .#nixos-in-podman
