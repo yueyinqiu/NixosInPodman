@@ -1,24 +1,15 @@
 # nixos-in-podman
 
-A full NixOS system in a Podman container, rebuildable in place with
-`nixos-rebuild switch`.
+A template for a full NixOS system in a Podman container, rebuildable in place
+with `nixos-rebuild switch`.
 
-## Use the published image
+## Use as a template
 
-No Nix needed — just Podman:
-
-```console
-podman run --privileged --name nixos-in-podman ghcr.io/yueyinqiu/nixos-in-podman:latest
-```
-
-Tags:
-
-- `latest` — the newest build from `main`.
-- `<commit sha>` — a specific commit.
-
-## Build from source
-
-Requires Nix with flakes enabled.
+1. Click **Use this template** on GitHub to create your own repository.
+2. Edit `configuration.nix` to your liking. If you publish an image, update the
+   repository path in `.github/workflows/publish.yml`; if not, delete that
+   workflow.
+3. Build and run (requires Nix with flakes enabled and Podman):
 
 ```console
 nix build .#nixos-in-podman-image
@@ -42,6 +33,15 @@ nixos-rebuild switch --flake .#nixos-in-podman
 ```
 
 This requires network access to fetch nixpkgs and the binary cache.
+
+## Published image
+
+The author publishes builds to `ghcr.io/yueyinqiu/nixos-in-podman` (tags:
+`latest` and the commit sha). To run one without building:
+
+```console
+podman run --privileged --name nixos-in-podman ghcr.io/yueyinqiu/nixos-in-podman:latest
+```
 
 ## Restarting
 
