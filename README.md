@@ -6,10 +6,11 @@ with `nixos-rebuild switch`.
 ## Use as a template
 
 1. Click **Use this template** on GitHub to create your own repository.
-2. Edit `configuration.nix` to your liking. If you publish an image, update the
-   repository path in `.github/workflows/publish.yml`; if not, delete that
-   workflow.
-3. Build and run (requires Nix with flakes enabled and Podman):
+2. Edit `configuration.nix` to your liking. The base is minimal, so add anything
+   you need in the container (e.g. `git`, `openssh`).
+3. If you publish an image, update the repository path in
+   `.github/workflows/publish.yml`; if not, delete that workflow.
+4. Build and run (requires Nix with flakes enabled and Podman):
 
 ```console
 nix build .#nixos-in-podman-image
@@ -19,16 +20,17 @@ podman run --privileged --name nixos-in-podman nixos-in-podman:local
 
 ## Rebuild inside the container
 
-Copy the flake sources (`flake.nix`, `flake.lock`, `configuration.nix`) into the
-container, then get a shell inside it:
+Get a shell inside the container:
 
 ```console
 podman exec -it nixos-in-podman /run/current-system/sw/bin/bash -l
 ```
 
-Then run:
+Then clone your repository and switch to it:
 
 ```console
+git clone <your-repository-url>
+cd <repository>
 nixos-rebuild switch --flake .#nixos-in-podman
 ```
 
